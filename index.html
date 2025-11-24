@@ -5,20 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DozorNowTube</title>
     <style>
-        /* --- ПЕРЕМЕННЫЕ ТЕМ (DEFAULT: DARK) --- */
+        /* --- ПЕРЕМЕННЫЕ ТЕМ (DEFAULT: DARK: СЕРО-РОЗОВЫЙ) --- */
         :root, .theme-dark {
-            /* Dark Theme: Gray-Pink */
             --primary-color: #ff2a6d; /* Ярко-розовый акцент */
-            --secondary-color: #d10047; /* Темный розовый */
+            --secondary-color: #d10047; 
             --bg-main: #1c1c2e; /* Главный фон (Темно-серый/синий) */
             --bg-secondary: #282840; /* Фон карточек и сайдбара */
             --text-main: #ffffff;
             --text-secondary: #cccccc;
             --border-color: #3e3e60;
+            --icon-color: var(--primary-color);
         }
         
         .theme-light {
-            /* Light Theme: Soft Blue-Black */
+            /* Light Theme: SOFT BLUE-BLACK */
             --primary-color: #007bff; /* Мягкий синий акцент */
             --secondary-color: #0056b3; 
             --bg-main: #f0f8ff; /* Светлый фон */
@@ -26,6 +26,7 @@
             --text-main: #000000;
             --text-secondary: #555555;
             --border-color: #dddddd;
+            --icon-color: var(--primary-color);
         }
 
         /* --- ОСНОВНЫЕ СТИЛИ --- */
@@ -35,7 +36,25 @@
             background-color: var(--bg-main); 
             color: var(--text-main); 
             transition: background-color 0.3s, color 0.3s;
+            display: flex; /* Делаем body флекс-контейнером для header */
+            flex-direction: column;
+            min-height: 100vh;
         }
+        
+        /* Стили для текстовых иконок, чтобы они выглядели красиво */
+        .app-icon {
+            font-size: 18px;
+            width: 25px;
+            text-align: center;
+            color: var(--icon-color);
+            line-height: 1; /* Улучшаем вертикальное выравнивание */
+            display: inline-block;
+        }
+        .app-icon-large {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+
 
         /* Header */
         header { 
@@ -48,9 +67,10 @@
             position: sticky; 
             top: 0; 
             z-index: 100; 
+            width: 100%; /* Добавляем ширину */
         }
         .logo { display: flex; align-items: center; font-size: 24px; font-weight: bold; color: var(--primary-color); cursor: pointer; }
-        .logo i { margin-right: 10px; }
+        
         .search-bar { display: flex; flex: 0 1 600px; }
         .search-bar input { 
             width: 100%; 
@@ -87,9 +107,15 @@
         }
 
         /* Layout */
-        .container { display: flex; max-width: 1400px; margin: 0 auto; min-height: 100vh; }
+        .container { 
+            display: flex; 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            flex: 1; /* Занимает всю доступную высоту */
+            width: 100%;
+        }
         .sidebar { 
-            width: 240px; 
+            min-width: 240px; /* Фиксируем ширину, чтобы не схлопывался */
             background-color: var(--bg-secondary); 
             padding: 20px 0; 
             height: calc(100vh - 60px); 
@@ -99,9 +125,9 @@
             border-right: 1px solid var(--border-color);
         }
         .sidebar-item { padding: 10px 20px; display: flex; align-items: center; cursor: pointer; transition: 0.3s; }
-        .sidebar-item:hover { background-color: rgba(var(--primary-color-rgb, 255, 42, 109), 0.1); }
-        .sidebar-item.active { background-color: rgba(var(--primary-color-rgb, 255, 42, 109), 0.2); border-right: 3px solid var(--primary-color); }
-        .sidebar-item i { margin-right: 15px; color: var(--primary-color); }
+        .sidebar-item:hover { background-color: rgba(40, 40, 64, 0.1); } /* Используем темный фон для ховера */
+        .sidebar-item.active { background-color: rgba(40, 40, 64, 0.2); border-right: 3px solid var(--primary-color); }
+        .sidebar-item .app-icon { margin-right: 15px; }
 
         .main-content { flex: 1; padding: 20px; }
         .section-title { margin-bottom: 20px; font-size: 24px; color: var(--primary-color); }
@@ -118,7 +144,7 @@
         }
         .video-card:hover { 
             transform: translateY(-5px); 
-            box-shadow: 0 5px 15px rgba(var(--primary-color-rgb, 255, 42, 109), 0.3); 
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); 
         }
         .thumbnail { width: 100%; height: 180px; background-color: #222; position: relative; overflow: hidden; }
         .thumbnail img { width: 100%; height: 100%; object-fit: cover; }
@@ -150,7 +176,7 @@
             background-color: #000;
         }
         .featured-player iframe {
-            display: block; /* Убираем лишние отступы */
+            display: block; 
         }
 
 
@@ -175,7 +201,7 @@
 
         /* Admin & Modals */
         .auth-modal, .upload-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; display: flex; }
-        .auth-modal.hidden, .upload-modal.hidden { display: none; } /* Класс для скрытия */
+        .auth-modal.hidden, .upload-modal.hidden { display: none; } 
         .auth-form, .upload-form { background: var(--bg-secondary); padding: 30px; border-radius: 10px; width: 400px; border: 1px solid var(--primary-color); color: var(--text-main); }
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 5px; }
@@ -185,11 +211,11 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            .sidebar { display: none; } /* Упрощаем для мобилок */
+            .sidebar { display: none; } 
             .search-bar { display: none; }
         }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
 </head>
 <body>
 
@@ -217,6 +243,7 @@
             <div class="form-group">
                 <label>Название</label>
                 <input type="text" id="upload-title">
+                <input type="hidden" id="upload-author" value="Admin Dozor">
             </div>
             <div class="form-group">
                 <label>Описание</label>
@@ -232,35 +259,35 @@
 
     <header>
         <div class="logo" onclick="showPage('home-page')">
-            <i class="fas fa-play-circle"></i>
+            <span class="app-icon-large">▶</span>
             <span>DozorNowTube</span>
         </div>
         <div class="search-bar">
             <input type="text" id="search-input" placeholder="Поиск...">
-            <button onclick="searchVideos()"><i class="fas fa-search"></i></button>
+            <button onclick="searchVideos()">🔍</button>
         </div>
         <div class="user-actions" id="auth-buttons">
-            <button class="theme-toggle-btn" onclick="toggleTheme()"><i class="fas fa-sun" id="theme-icon"></i></button>
-            <button onclick="toggleModal('auth-modal')"><i class="fas fa-user-circle"></i> Войти</button>
+            <button class="theme-toggle-btn" onclick="toggleTheme()"><span id="theme-icon" class="app-icon">☀️</span></button>
+            <button onclick="toggleModal('auth-modal')"><span class="app-icon">👤</span> Войти</button>
         </div>
         <div class="user-actions" id="user-buttons" style="display:none;">
-            <button class="theme-toggle-btn" onclick="toggleTheme()"><i class="fas fa-sun" id="theme-icon-user"></i></button>
-            <button onclick="toggleModal('upload-modal')"><i class="fas fa-upload"></i></button>
-            <button onclick="showPage('channel-page')"><i class="fas fa-user"></i></button>
-            <button onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
+            <button class="theme-toggle-btn" onclick="toggleTheme()"><span id="theme-icon-user" class="app-icon">☀️</span></button>
+            <button onclick="toggleModal('upload-modal')"><span class="app-icon">📤</span></button>
+            <button onclick="showPage('channel-page')"><span class="app-icon">👨‍💻</span></button>
+            <button onclick="logout()"><span class="app-icon">🚪</span></button>
         </div>
     </header>
 
     <div class="container">
         <div class="sidebar">
             <div class="sidebar-item active" onclick="showPage('home-page')">
-                <i class="fas fa-home"></i> <span>Главная</span>
+                <span class="app-icon">🏠</span> <span>Главная</span>
             </div>
             <div class="sidebar-item">
-                <i class="fas fa-fire"></i> <span>В тренде</span>
+                <span class="app-icon">🔥</span> <span>В тренде</span>
             </div>
             <div class="sidebar-item">
-                <i class="fas fa-history"></i> <span>История</span>
+                <span class="app-icon">🕰️</span> <span>История</span>
             </div>
         </div>
 
@@ -279,7 +306,7 @@
             </div>
                         <h2 class="section-title">Ещё рекомендации</h2>
             <div class="video-grid" id="video-grid">
-                </div>
+            </div>
         </div>
 
         <div class="main-content video-player-container" id="player-page" style="display:none;">
@@ -288,8 +315,8 @@
                 <h2 id="player-title" style="margin-top:10px;">Название видео</h2>
                 <div class="video-controls">
                     <div style="display:flex;">
-                        <button class="action-btn" onclick="likeVideo()"><i class="fas fa-thumbs-up"></i> <span id="like-count">0</span></button>
-                        <button class="action-btn"><i class="fas fa-share"></i> Поделиться</button>
+                        <button class="action-btn" onclick="likeVideo()"><span class="app-icon">👍</span> <span id="like-count">0</span></button>
+                        <button class="action-btn"><span class="app-icon">🔗</span> Поделиться</button>
                     </div>
                     <button class="subscribe-btn" id="sub-btn" onclick="toggleSubscribe()">Подписаться</button>
                 </div>
@@ -359,37 +386,48 @@
             }
         ];
 
-        let currentUser = null; // Текущий пользователь
-        let comments = []; // Комментарии
+        let currentUser = null; 
+        let comments = []; 
 
         // --- 2. ИНИЦИАЛИЗАЦИЯ ---
         window.onload = function() {
             renderVideos(videos);
             // Устанавливаем иконку темы при загрузке
-            const isLight = document.body.classList.contains('theme-light');
-            document.getElementById('theme-icon').className = isLight ? 'fas fa-moon' : 'fas fa-sun';
-            if (document.getElementById('theme-icon-user')) {
-                 document.getElementById('theme-icon-user').className = isLight ? 'fas fa-moon' : 'fas fa-sun';
+            const isLight = localStorage.getItem('theme') === 'light';
+            if (isLight) {
+                document.body.classList.add('theme-light');
+            } else {
+                document.body.classList.add('theme-dark');
             }
+            // Обновляем иконки темы
+            updateThemeIcons(isLight);
         };
         
         // --- 3. ЛОГИКА СМЕНЫ ТЕМЫ ---
-        function toggleTheme() {
-            document.body.classList.toggle('theme-light');
-            document.body.classList.toggle('theme-dark');
-            
-            const isLight = document.body.classList.contains('theme-light');
+        function updateThemeIcons(isLight) {
+            const iconSun = '☀️';
+            const iconMoon = '🌙';
+
             const iconElement = document.getElementById('theme-icon');
             const iconElementUser = document.getElementById('theme-icon-user');
 
+            const iconToUse = isLight ? iconMoon : iconSun;
+
             if (iconElement) {
-                iconElement.className = isLight ? 'fas fa-moon' : 'fas fa-sun';
+                iconElement.innerText = iconToUse;
             }
             if (iconElementUser) {
-                iconElementUser.className = isLight ? 'fas fa-moon' : 'fas fa-sun';
+                iconElementUser.innerText = iconToUse;
             }
-            // Сохраняем выбор темы в браузере (опционально)
+        }
+
+        function toggleTheme() {
+            const isLight = document.body.classList.toggle('theme-light');
+            document.body.classList.toggle('theme-dark', !isLight);
+            
+            // Сохраняем выбор темы
             localStorage.setItem('theme', isLight ? 'light' : 'dark');
+            updateThemeIcons(isLight);
         }
 
 
@@ -469,7 +507,6 @@
         function likeVideo() {
             let count = document.getElementById('like-count');
             count.innerText = parseInt(count.innerText) + 1;
-            // Анимация кнопки (просто изменение цвета)
             event.currentTarget.style.color = 'var(--primary-color)';
         }
 
@@ -516,28 +553,22 @@
 
             if (title && fileInput.files[0]) {
                 const file = fileInput.files[0];
-                const fileURL = URL.createObjectURL(file); // Создаем ссылку на локальный файл
+                const fileURL = URL.createObjectURL(file); 
 
                 const newVideo = {
                     id: Date.now(),
                     title: title,
                     desc: desc,
                     src: fileURL,
-                    thumbnail: 'https://via.placeholder.com/300x180?text=New+Video', // Заглушка
+                    thumbnail: 'https://via.placeholder.com/300x180?text=New+Video', 
                     views: "0",
-                    author: currentUser.name,
+                    author: currentUser ? currentUser.name : "Неизвестный",
                     likes: 0
                 };
 
-                videos.unshift(newVideo); // Добавляем в начало
+                videos.unshift(newVideo); 
                 renderVideos(videos);
-
-                // Добавляем в "Мои видео"
-                const myGrid = document.getElementById('my-videos-grid');
-                if(myGrid.innerText.includes("Вы пока не загрузили")) myGrid.innerHTML = '';
-
-                // Клонируем карточку для профиля
-                // (В реальном проекте тут был бы отдельный рендер)
+                
                 toggleModal('upload-modal');
                 alert("Видео успешно опубликовано!");
                 showPage('home-page');
