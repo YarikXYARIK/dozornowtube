@@ -1,440 +1,452 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DozorNowTube</title>
-    <style>
-        /* --- ТВОИ СТИЛИ (ОСТАВЛЯЕМ БЕЗ ИЗМЕНЕНИЙ) --- */
-        :root {
-            --primary-pink: #ff2a6d;
-            --dark-pink: #d10047;
-            --light-pink: #ff5c8d;
-            --dark-bg: #0c0c1d;
-            --darker-bg: #050510;
-            --text-color: #ffffff;
-            --secondary-text: #cccccc;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', Arial, sans-serif; }
-        body { background-color: var(--dark-bg); color: var(--text-color); }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DozorNowTube</title>
+    <style>
+        /* --- ТВОИ СТИЛИ (ОСТАВЛЯЕМ БЕЗ ИЗМЕНЕНИЙ) --- */
+        :root {
+            --primary-pink: #ff2a6d;
+            --dark-pink: #d10047;
+            --light-pink: #ff5c8d;
+            --dark-bg: #0c0c1d;
+            --darker-bg: #050510;
+            --text-color: #ffffff;
+            --secondary-text: #cccccc;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', Arial, sans-serif; }
+        body { background-color: var(--dark-bg); color: var(--text-color); }
 
-        /* Header */
-        header { background-color: var(--darker-bg); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary-pink); position: sticky; top: 0; z-index: 100; }
-        .logo { display: flex; align-items: center; font-size: 24px; font-weight: bold; color: var(--primary-pink); cursor: pointer; }
-        .logo i { margin-right: 10px; }
-        .search-bar { display: flex; flex: 0 1 600px; }
-        .search-bar input { width: 100%; padding: 8px 15px; background-color: var(--dark-bg); border: 1px solid var(--primary-pink); color: var(--text-color); border-radius: 20px 0 0 20px; outline: none; }
-        .search-bar button { padding: 8px 15px; background-color: var(--primary-pink); border: none; border-radius: 0 20px 20px 0; color: white; cursor: pointer; }
-        .user-actions { display: flex; align-items: center; }
-        .user-actions button { background: none; border: none; color: var(--text-color); margin-left: 15px; cursor: pointer; font-size: 16px; display: flex; align-items: center; gap: 5px; }
+        /* Header */
+        header { background-color: var(--darker-bg); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary-pink); position: sticky; top: 0; z-index: 100; }
+        .logo { display: flex; align-items: center; font-size: 24px; font-weight: bold; color: var(--primary-pink); cursor: pointer; }
+        .logo i { margin-right: 10px; }
+        .search-bar { display: flex; flex: 0 1 600px; }
+        .search-bar input { width: 100%; padding: 8px 15px; background-color: var(--dark-bg); border: 1px solid var(--primary-pink); color: var(--text-color); border-radius: 20px 0 0 20px; outline: none; }
+        .search-bar button { padding: 8px 15px; background-color: var(--primary-pink); border: none; border-radius: 0 20px 20px 0; color: white; cursor: pointer; }
+        .user-actions { display: flex; align-items: center; }
+        .user-actions button { background: none; border: none; color: var(--text-color); margin-left: 15px; cursor: pointer; font-size: 16px; display: flex; align-items: center; gap: 5px; }
 
-        /* Layout */
-        .container { display: flex; max-width: 1400px; margin: 0 auto; min-height: 100vh; }
-        .sidebar { width: 240px; background-color: var(--darker-bg); padding: 20px 0; height: calc(100vh - 60px); position: sticky; top: 60px; overflow-y: auto; }
-        .sidebar-item { padding: 10px 20px; display: flex; align-items: center; cursor: pointer; transition: 0.3s; }
-        .sidebar-item:hover { background-color: rgba(255, 42, 109, 0.1); }
-        .sidebar-item.active { background-color: rgba(255, 42, 109, 0.2); border-right: 3px solid var(--primary-pink); }
-        .sidebar-item i { margin-right: 15px; color: var(--primary-pink); }
+        /* Layout */
+        .container { display: flex; max-width: 1400px; margin: 0 auto; min-height: 100vh; }
+        .sidebar { width: 240px; background-color: var(--darker-bg); padding: 20px 0; height: calc(100vh - 60px); position: sticky; top: 60px; overflow-y: auto; }
+        .sidebar-item { padding: 10px 20px; display: flex; align-items: center; cursor: pointer; transition: 0.3s; }
+        .sidebar-item:hover { background-color: rgba(255, 42, 109, 0.1); }
+        .sidebar-item.active { background-color: rgba(255, 42, 109, 0.2); border-right: 3px solid var(--primary-pink); }
+        .sidebar-item i { margin-right: 15px; color: var(--primary-pink); }
 
-        .main-content { flex: 1; padding: 20px; }
-        .section-title { margin-bottom: 20px; font-size: 24px; color: var(--primary-pink); }
+        .main-content { flex: 1; padding: 20px; }
+        .section-title { margin-bottom: 20px; font-size: 24px; color: var(--primary-pink); }
 
-        /* Video Grid */
-        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-        .video-card { background-color: var(--darker-bg); border-radius: 8px; overflow: hidden; transition: transform 0.3s; cursor: pointer; }
-        .video-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(255, 42, 109, 0.3); }
-        .thumbnail { width: 100%; height: 180px; background-color: #222; position: relative; overflow: hidden; }
-        .thumbnail img { width: 100%; height: 100%; object-fit: cover; }
-        .duration { position: absolute; bottom: 10px; right: 10px; background-color: rgba(0, 0, 0, 0.7); padding: 2px 6px; border-radius: 4px; font-size: 12px; }
-        .video-info { padding: 10px; }
-        .video-title { font-weight: bold; margin-bottom: 5px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .channel-info { display: flex; align-items: center; margin-top: 8px; font-size: 14px; color: var(--secondary-text); }
-        .channel-avatar { width: 30px; height: 30px; border-radius: 50%; background-color: var(--light-pink); margin-right: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; font-size: 12px;}
-        .video-stats { color: var(--secondary-text); font-size: 13px; margin-top: 5px; }
+        /* Video Grid */
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .video-card { background-color: var(--darker-bg); border-radius: 8px; overflow: hidden; transition: transform 0.3s; cursor: pointer; }
+        .video-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(255, 42, 109, 0.3); }
+        .thumbnail { width: 100%; height: 180px; background-color: #222; position: relative; overflow: hidden; }
+        .thumbnail img { width: 100%; height: 100%; object-fit: cover; }
+        .duration { position: absolute; bottom: 10px; right: 10px; background-color: rgba(0, 0, 0, 0.7); padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+        .video-info { padding: 10px; }
+        .video-title { font-weight: bold; margin-bottom: 5px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .channel-info { display: flex; align-items: center; margin-top: 8px; font-size: 14px; color: var(--secondary-text); }
+        .channel-avatar { width: 30px; height: 30px; border-radius: 50%; background-color: var(--light-pink); margin-right: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; font-size: 12px;}
+        .video-stats { color: var(--secondary-text); font-size: 13px; margin-top: 5px; }
 
-        /* Pages logic (Hidden by default) */
-        .video-player-container, .channel-page, .auth-modal, .upload-modal, .admin-panel { display: none; }
+        /* Pages logic (Hidden by default) */
+        .video-player-container, .channel-page, .auth-modal, .upload-modal, .admin-panel { display: none; }
 
-        /* Player Styles */
-        .real-video-player { width: 100%; background: #000; border-radius: 8px; max-height: 600px; }
-        .video-controls { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #333; }
-        .action-btn { background: none; border: none; color: white; cursor: pointer; display: flex; align-items: center; gap: 5px; margin-right: 15px; font-size: 16px;}
-        .action-btn:hover { color: var(--primary-pink); }
-        .subscribe-btn { padding: 10px 20px; background-color: var(--primary-pink); border: none; border-radius: 20px; color: white; cursor: pointer; font-weight: bold; margin-left: auto; }
-        .subscribe-btn.subscribed { background-color: #444; }
+        /* Player Styles */
+        .real-video-player { width: 100%; background: #000; border-radius: 8px; max-height: 600px; }
+        .video-controls { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #333; }
+        .action-btn { background: none; border: none; color: white; cursor: pointer; display: flex; align-items: center; gap: 5px; margin-right: 15px; font-size: 16px;}
+        .action-btn:hover { color: var(--primary-pink); }
+        .subscribe-btn { padding: 10px 20px; background-color: var(--primary-pink); border: none; border-radius: 20px; color: white; cursor: pointer; font-weight: bold; margin-left: auto; }
+        .subscribe-btn.subscribed { background-color: #444; }
 
-        /* Comments */
-        .comments-section { margin-top: 20px; }
-        .comment-form { display: flex; gap: 10px; margin-bottom: 20px; }
-        .comment-input { flex: 1; padding: 10px; background: var(--darker-bg); border: 1px solid #333; color: white; border-radius: 4px; }
-        .comment-submit { padding: 0 20px; background: var(--primary-pink); border: none; color: white; border-radius: 4px; cursor: pointer; }
-        .comment { border-bottom: 1px solid #333; padding: 10px 0; display: flex; gap: 10px; }
+        /* Comments */
+        .comments-section { margin-top: 20px; }
+        .comment-form { display: flex; gap: 10px; margin-bottom: 20px; }
+        .comment-input { flex: 1; padding: 10px; background: var(--darker-bg); border: 1px solid #333; color: white; border-radius: 4px; }
+        .comment-submit { padding: 0 20px; background: var(--primary-pink); border: none; color: white; border-radius: 4px; cursor: pointer; }
+        .comment { border-bottom: 1px solid #333; padding: 10px 0; display: flex; gap: 10px; }
 
-        /* Admin & Modals */
-        .auth-modal, .upload-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; display: flex; }
-        .auth-modal.hidden, .upload-modal.hidden { display: none; } /* Класс для скрытия */
-        .auth-form, .upload-form { background: var(--darker-bg); padding: 30px; border-radius: 10px; width: 400px; border: 1px solid var(--primary-pink); }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; }
-        .form-group input, .form-group textarea { width: 100%; padding: 10px; background: var(--dark-bg); border: 1px solid #444; color: white; border-radius: 4px; }
-        .auth-btn, .upload-btn { width: 100%; padding: 10px; background: var(--primary-pink); border: none; color: white; cursor: pointer; margin-top: 10px; }
-        .close-modal { float: right; cursor: pointer; font-size: 20px; }
+        /* Admin & Modals */
+        .auth-modal, .upload-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; display: flex; }
+        .auth-modal.hidden, .upload-modal.hidden { display: none; } /* Класс для скрытия */
+        .auth-form, .upload-form { background: var(--darker-bg); padding: 30px; border-radius: 10px; width: 400px; border: 1px solid var(--primary-pink); }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; }
+        .form-group input, .form-group textarea { width: 100%; padding: 10px; background: var(--dark-bg); border: 1px solid #444; color: white; border-radius: 4px; }
+        .auth-btn, .upload-btn { width: 100%; padding: 10px; background: var(--primary-pink); border: none; color: white; cursor: pointer; margin-top: 10px; }
+        .close-modal { float: right; cursor: pointer; font-size: 20px; }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .sidebar { display: none; } /* Упрощаем для мобилок */
-            .search-bar { display: none; }
-        }
-    </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar { display: none; } /* Упрощаем для мобилок */
+            .search-bar { display: none; }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
-    <div class="auth-modal hidden" id="auth-modal">
-        <div class="auth-form">
-            <span class="close-modal" onclick="toggleModal('auth-modal')">&times;</span>
-            <h2>Вход</h2>
-            <div class="form-group">
-                <label>Логин</label>
-                <input type="text" id="login-input" placeholder="admin">
+    <div class="auth-modal hidden" id="auth-modal">
+        <div class="auth-form">
+            <span class="close-modal" onclick="toggleModal('auth-modal')">&times;</span>
+            <h2>Вход</h2>
+            <div class="form-group">
+                <label>Логин</label>
+                <input type="text" id="login-input" placeholder="admin">
+            </div>
+            <div class="form-group">
+                <label>Пароль</label>
+                <input type="password" id="pass-input" placeholder="1234">
+            </div>
+            <button class="auth-btn" onclick="login()">Войти</button>
+            <p style="margin-top:10px; font-size:12px; color:gray;">(Тест: логин <b>admin</b>, пароль <b>1234</b>)</p>
+        </div>
+    </div>
+
+    <div class="upload-modal hidden" id="upload-modal">
+        <div class="upload-form">
+            <span class="close-modal" onclick="toggleModal('upload-modal')">&times;</span>
+            <h2>Загрузить видео</h2>
+            <div class="form-group">
+                <label>Название</label>
+                <input type="text" id="upload-title">
+            </div>
+            <div class="form-group">
+                <label>Описание</label>
+                <textarea id="upload-desc"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Файл (выберите mp4)</label>
+                <input type="file" id="upload-file" accept="video/*">
+            </div>
+            <button class="upload-btn" onclick="uploadVideo()">Опубликовать</button>
+        </div>
+    </div>
+
+    <header>
+        <div class="logo" onclick="showPage('home-page')">
+            <i class="fas fa-play-circle"></i>
+            <span>DozorNowTube</span>
+        </div>
+        <div class="search-bar">
+            <input type="text" id="search-input" placeholder="Поиск...">
+            <button onclick="searchVideos()"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="user-actions" id="auth-buttons">
+            <button onclick="toggleModal('auth-modal')"><i class="fas fa-user-circle"></i> Войти</button>
+        </div>
+        <div class="user-actions" id="user-buttons" style="display:none;">
+            <button onclick="toggleModal('upload-modal')"><i class="fas fa-upload"></i></button>
+            <button onclick="showPage('channel-page')"><i class="fas fa-user"></i></button>
+            <button onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="sidebar">
+            <div class="sidebar-item active" onclick="showPage('home-page')">
+                <i class="fas fa-home"></i> <span>Главная</span>
+            </div>
+            <div class="sidebar-item">
+                <i class="fas fa-fire"></i> <span>В тренде</span>
+            </div>
+            <div class="sidebar-item">
+                <i class="fas fa-history"></i> <span>История</span>
+            </div>
+        </div>
+
+        <div class="main-content" id="home-page">
+            <h2 class="section-title">В ЭФИРЕ СЕЙЧАС</h2> 
+            
+            <div style="margin-bottom: 30px;">
+                <iframe src="https://vkvideo.ru/video_ext.php?oid=-211169870&id=456242051&autoplay=1" 
+                        width="100%" 
+                        height="450" 
+                        style="background-color: #000; border-radius: 8px;" 
+                        allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;" 
+                        frameborder="0" 
+                        allowfullscreen>
+                </iframe>
             </div>
-            <div class="form-group">
-                <label>Пароль</label>
-                <input type="password" id="pass-input" placeholder="1234">
-            </div>
-            <button class="auth-btn" onclick="login()">Войти</button>
-            <p style="margin-top:10px; font-size:12px; color:gray;">(Тест: логин <b>admin</b>, пароль <b>1234</b>)</p>
-        </div>
-    </div>
+                        <h2 class="section-title">Рекомендуемые</h2>
+            <div class="video-grid" id="video-grid">
+                </div>
+        </div>
 
-    <div class="upload-modal hidden" id="upload-modal">
-        <div class="upload-form">
-            <span class="close-modal" onclick="toggleModal('upload-modal')">&times;</span>
-            <h2>Загрузить видео</h2>
-            <div class="form-group">
-                <label>Название</label>
-                <input type="text" id="upload-title">
-            </div>
-            <div class="form-group">
-                <label>Описание</label>
-                <textarea id="upload-desc"></textarea>
-            </div>
-            <div class="form-group">
-                <label>Файл (выберите mp4)</label>
-                <input type="file" id="upload-file" accept="video/*">
-            </div>
-            <button class="upload-btn" onclick="uploadVideo()">Опубликовать</button>
-        </div>
-    </div>
+        <div class="main-content video-player-container" id="player-page" style="display:none;">
+            <video id="main-video-player" class="real-video-player" controls autoplay></video>
+            <div class="video-info">
+                <h2 id="player-title" style="margin-top:10px;">Название видео</h2>
+                <div class="video-controls">
+                    <div style="display:flex;">
+                        <button class="action-btn" onclick="likeVideo()"><i class="fas fa-thumbs-up"></i> <span id="like-count">0</span></button>
+                        <button class="action-btn"><i class="fas fa-share"></i> Поделиться</button>
+                    </div>
+                    <button class="subscribe-btn" id="sub-btn" onclick="toggleSubscribe()">Подписаться</button>
+                </div>
+                <div style="background: var(--darker-bg); padding: 15px; border-radius: 8px; margin-top:10px;">
+                    <p id="player-desc">Описание видео...</p>
+                </div>
 
-    <header>
-        <div class="logo" onclick="showPage('home-page')">
-            <i class="fas fa-play-circle"></i>
-            <span>DozorNowTube</span>
-        </div>
-        <div class="search-bar">
-            <input type="text" id="search-input" placeholder="Поиск...">
-            <button onclick="searchVideos()"><i class="fas fa-search"></i></button>
-        </div>
-        <div class="user-actions" id="auth-buttons">
-            <button onclick="toggleModal('auth-modal')"><i class="fas fa-user-circle"></i> Войти</button>
-        </div>
-        <div class="user-actions" id="user-buttons" style="display:none;">
-            <button onclick="toggleModal('upload-modal')"><i class="fas fa-upload"></i></button>
-            <button onclick="showPage('channel-page')"><i class="fas fa-user"></i></button>
-            <button onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
-        </div>
-    </header>
+                <div class="comments-section">
+                    <h3>Комментарии</h3>
+                    <div class="comment-form">
+                        <input type="text" class="comment-input" id="comment-text" placeholder="Написать комментарий...">
+                        <button class="comment-submit" onclick="addComment()">Отправить</button>
+                    </div>
+                    <div id="comments-list">
+                        </div>
+                </div>
+            </div>
+        </div>
 
-    <div class="container">
-        <div class="sidebar">
-            <div class="sidebar-item active" onclick="showPage('home-page')">
-                <i class="fas fa-home"></i> <span>Главная</span>
-            </div>
-            <div class="sidebar-item">
-                <i class="fas fa-fire"></i> <span>В тренде</span>
-            </div>
-            <div class="sidebar-item">
-                <i class="fas fa-history"></i> <span>История</span>
-            </div>
-        </div>
+        <div class="main-content channel-page" id="channel-page" style="display:none;">
+            <div style="display:flex; align-items:center; margin-bottom:30px;">
+                <div class="channel-avatar" style="width:100px; height:100px; font-size:40px;">U</div>
+                <div>
+                    <h1 id="channel-name">User Name</h1>
+                    <p style="color:gray;">0 подписчиков</p>
+                </div>
+            </div>
+            <h2>Мои видео</h2>
+            <div class="video-grid" id="my-videos-grid">
+                <p style="color:gray;">Вы пока не загрузили видео.</p>
+            </div>
+        </div>
+    </div>
 
-        <div class="main-content" id="home-page">
-            <h2 class="section-title">Рекомендуемые</h2>
-            <div class="video-grid" id="video-grid">
-                </div>
-        </div>
+    <script>
+        // --- 1. ДАННЫЕ (Имитация базы данных) ---
+        let videos = [
+            {
+                id: 1,
+                title: "Big Buck Bunny - 3D Cartoon",
+                desc: "Классическое тестовое видео Blender Foundation.",
+                src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                thumbnail: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Big_buck_bunny_poster_big.jpg/800px-Big_buck_bunny_poster_big.jpg",
+                views: "1.2M",
+                author: "Blender",
+                likes: 1500
+            },
+            {
+                id: 2,
+                title: "Sintel - Фантастический фильм",
+                desc: "Трогательная история о драконе.",
+                src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+                thumbnail: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Sintel_poster.jpg/640px-Sintel_poster.jpg",
+                views: "800K",
+                author: "Blender",
+                likes: 900
+            },
+            {
+                id: 3,
+                title: "Tears of Steel - SciFi",
+                desc: "Фантастика с крутой графикой.",
+                src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+                thumbnail: "https://mango.blender.org/wp-content/uploads/2013/05/01_thom_celia_bridge.jpg",
+                views: "2.5M",
+                author: "Tears Studio",
+                likes: 3000
+            }
+        ];
 
-        <div class="main-content video-player-container" id="player-page" style="display:none;">
-            <video id="main-video-player" class="real-video-player" controls autoplay></video>
-            <div class="video-info">
-                <h2 id="player-title" style="margin-top:10px;">Название видео</h2>
-                <div class="video-controls">
-                    <div style="display:flex;">
-                        <button class="action-btn" onclick="likeVideo()"><i class="fas fa-thumbs-up"></i> <span id="like-count">0</span></button>
-                        <button class="action-btn"><i class="fas fa-share"></i> Поделиться</button>
-                    </div>
-                    <button class="subscribe-btn" id="sub-btn" onclick="toggleSubscribe()">Подписаться</button>
-                </div>
-                <div style="background: var(--darker-bg); padding: 15px; border-radius: 8px; margin-top:10px;">
-                    <p id="player-desc">Описание видео...</p>
-                </div>
+        let currentUser = null; // Текущий пользователь
+        let comments = []; // Комментарии
 
-                <div class="comments-section">
-                    <h3>Комментарии</h3>
-                    <div class="comment-form">
-                        <input type="text" class="comment-input" id="comment-text" placeholder="Написать комментарий...">
-                        <button class="comment-submit" onclick="addComment()">Отправить</button>
-                    </div>
-                    <div id="comments-list">
-                        </div>
-                </div>
-            </div>
-        </div>
+        // --- 2. ИНИЦИАЛИЗАЦИЯ ---
+        window.onload = function() {
+            renderVideos(videos);
+        };
 
-        <div class="main-content channel-page" id="channel-page" style="display:none;">
-            <div style="display:flex; align-items:center; margin-bottom:30px;">
-                <div class="channel-avatar" style="width:100px; height:100px; font-size:40px;">U</div>
-                <div>
-                    <h1 id="channel-name">User Name</h1>
-                    <p style="color:gray;">0 подписчиков</p>
-                </div>
-            </div>
-            <h2>Мои видео</h2>
-            <div class="video-grid" id="my-videos-grid">
-                <p style="color:gray;">Вы пока не загрузили видео.</p>
-            </div>
-        </div>
-    </div>
+        // --- 3. ФУНКЦИИ ОТРИСОВКИ ---
+        function renderVideos(videoList) {
+            const grid = document.getElementById('video-grid');
+            grid.innerHTML = '';
 
-    <script>
-        // --- 1. ДАННЫЕ (Имитация базы данных) ---
-        let videos = [
-            {
-                id: 1,
-                title: "Big Buck Bunny - 3D Cartoon",
-                desc: "Классическое тестовое видео Blender Foundation.",
-                src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-                thumbnail: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Big_buck_bunny_poster_big.jpg/800px-Big_buck_bunny_poster_big.jpg",
-                views: "1.2M",
-                author: "Blender",
-                likes: 1500
-            },
-            {
-                id: 2,
-                title: "Sintel - Фантастический фильм",
-                desc: "Трогательная история о драконе.",
-                src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
-                thumbnail: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Sintel_poster.jpg/640px-Sintel_poster.jpg",
-                views: "800K",
-                author: "Blender",
-                likes: 900
-            },
-            {
-                id: 3,
-                title: "Tears of Steel - SciFi",
-                desc: "Фантастика с крутой графикой.",
-                src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
-                thumbnail: "https://mango.blender.org/wp-content/uploads/2013/05/01_thom_celia_bridge.jpg",
-                views: "2.5M",
-                author: "Tears Studio",
-                likes: 3000
-            }
-        ];
+            videoList.forEach(video => {
+                const card = document.createElement('div');
+                card.className = 'video-card';
+                card.onclick = () => openPlayer(video);
 
-        let currentUser = null; // Текущий пользователь
-        let comments = []; // Комментарии
+                card.innerHTML = `
+                    <div class="thumbnail">
+                        <img src="${video.thumbnail}" alt="${video.title}" onerror="this.src='https://via.placeholder.com/300x180?text=No+Image'">
+                        <span class="duration">10:00</span>
+                    </div>
+                    <div class="video-info">
+                        <div class="video-title">${video.title}</div>
+                        <div class="channel-info">
+                            <div class="channel-avatar">${video.author[0]}</div>
+                            <span>${video.author}</span>
+                        </div>
+                        <div class="video-stats">${video.views} просмотров • 1 день назад</div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
 
-        // --- 2. ИНИЦИАЛИЗАЦИЯ ---
-        window.onload = function() {
-            renderVideos(videos);
-        };
+        // --- 4. НАВИГАЦИЯ ---
+        function showPage(pageId) {
+            // Скрываем все страницы
+            document.getElementById('home-page').style.display = 'none';
+            document.getElementById('player-page').style.display = 'none';
+            document.getElementById('channel-page').style.display = 'none';
 
-        // --- 3. ФУНКЦИИ ОТРИСОВКИ ---
-        function renderVideos(videoList) {
-            const grid = document.getElementById('video-grid');
-            grid.innerHTML = '';
+            // Показываем нужную
+            document.getElementById(pageId).style.display = (pageId === 'player-page') ? 'block' : (pageId === 'video-grid' ? 'grid' : 'block');
 
-            videoList.forEach(video => {
-                const card = document.createElement('div');
-                card.className = 'video-card';
-                card.onclick = () => openPlayer(video);
+            if(pageId === 'home-page') {
+                document.getElementById('home-page').style.display = 'block';
+                // Останавливаем видео если ушли с плеера
+                document.getElementById('main-video-player').pause();
+            }
+        }
 
-                card.innerHTML = `
-                    <div class="thumbnail">
-                        <img src="${video.thumbnail}" alt="${video.title}" onerror="this.src='https://via.placeholder.com/300x180?text=No+Image'">
-                        <span class="duration">10:00</span>
-                    </div>
-                    <div class="video-info">
-                        <div class="video-title">${video.title}</div>
-                        <div class="channel-info">
-                            <div class="channel-avatar">${video.author[0]}</div>
-                            <span>${video.author}</span>
-                        </div>
-                        <div class="video-stats">${video.views} просмотров • 1 день назад</div>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
+        function toggleModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
 
-        // --- 4. НАВИГАЦИЯ ---
-        function showPage(pageId) {
-            // Скрываем все страницы
-            document.getElementById('home-page').style.display = 'none';
-            document.getElementById('player-page').style.display = 'none';
-            document.getElementById('channel-page').style.display = 'none';
+        // --- 5. ЛОГИКА ПЛЕЕРА ---
+        function openPlayer(video) {
+            showPage('player-page');
+            const player = document.getElementById('main-video-player');
+            player.src = video.src;
+            player.play();
 
-            // Показываем нужную
-            document.getElementById(pageId).style.display = (pageId === 'player-page') ? 'block' : (pageId === 'video-grid' ? 'grid' : 'block');
+            document.getElementById('player-title').innerText = video.title;
+            document.getElementById('player-desc').innerText = video.desc;
+            document.getElementById('like-count').innerText = video.likes;
 
-            if(pageId === 'home-page') {
-                document.getElementById('home-page').style.display = 'block';
-                // Останавливаем видео если ушли с плеера
-                document.getElementById('main-video-player').pause();
-            }
-        }
+            renderComments();
+        }
 
-        function toggleModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal.classList.contains('hidden')) {
-                modal.classList.remove('hidden');
-            } else {
-                modal.classList.add('hidden');
-            }
-        }
+        function likeVideo() {
+            let count = document.getElementById('like-count');
+            count.innerText = parseInt(count.innerText) + 1;
+            // Анимация кнопки (просто изменение цвета)
+            event.currentTarget.style.color = 'var(--primary-pink)';
+        }
 
-        // --- 5. ЛОГИКА ПЛЕЕРА ---
-        function openPlayer(video) {
-            showPage('player-page');
-            const player = document.getElementById('main-video-player');
-            player.src = video.src;
-            player.play();
+        function toggleSubscribe() {
+            const btn = document.getElementById('sub-btn');
+            if(btn.innerText === "Подписаться") {
+                btn.innerText = "Вы подписаны";
+                btn.classList.add('subscribed');
+            } else {
+                btn.innerText = "Подписаться";
+                btn.classList.remove('subscribed');
+            }
+        }
 
-            document.getElementById('player-title').innerText = video.title;
-            document.getElementById('player-desc').innerText = video.desc;
-            document.getElementById('like-count').innerText = video.likes;
+        // --- 6. АВТОРИЗАЦИЯ ---
+        function login() {
+            const loginInput = document.getElementById('login-input').value;
+            const passInput = document.getElementById('pass-input').value;
 
-            renderComments();
-        }
+            if(loginInput === 'admin' && passInput === '1234') {
+                currentUser = { name: "Admin Dozor", login: "admin" };
+                document.getElementById('auth-buttons').style.display = 'none';
+                document.getElementById('user-buttons').style.display = 'flex';
+                document.getElementById('channel-name').innerText = currentUser.name;
+                toggleModal('auth-modal');
+                alert("Добро пожаловать, Кодер!");
+            } else {
+                alert("Неверный логин или пароль! (Попробуй admin / 1234)");
+            }
+        }
 
-        function likeVideo() {
-            let count = document.getElementById('like-count');
-            count.innerText = parseInt(count.innerText) + 1;
-            // Анимация кнопки (просто изменение цвета)
-            event.currentTarget.style.color = 'var(--primary-pink)';
-        }
+        function logout() {
+            currentUser = null;
+            document.getElementById('auth-buttons').style.display = 'flex';
+            document.getElementById('user-buttons').style.display = 'none';
+            showPage('home-page');
+        }
 
-        function toggleSubscribe() {
-            const btn = document.getElementById('sub-btn');
-            if(btn.innerText === "Подписаться") {
-                btn.innerText = "Вы подписаны";
-                btn.classList.add('subscribed');
-            } else {
-                btn.innerText = "Подписаться";
-                btn.classList.remove('subscribed');
-            }
-        }
+        // --- 7. ЗАГРУЗКА ВИДЕО (ИМИТАЦИЯ) ---
+        function uploadVideo() {
+            const title = document.getElementById('upload-title').value;
+            const desc = document.getElementById('upload-desc').value;
+            const fileInput = document.getElementById('upload-file');
 
-        // --- 6. АВТОРИЗАЦИЯ ---
-        function login() {
-            const loginInput = document.getElementById('login-input').value;
-            const passInput = document.getElementById('pass-input').value;
+            if (title && fileInput.files[0]) {
+                const file = fileInput.files[0];
+                const fileURL = URL.createObjectURL(file); // Создаем ссылку на локальный файл
 
-            if(loginInput === 'admin' && passInput === '1234') {
-                currentUser = { name: "Admin Dozor", login: "admin" };
-                document.getElementById('auth-buttons').style.display = 'none';
-                document.getElementById('user-buttons').style.display = 'flex';
-                document.getElementById('channel-name').innerText = currentUser.name;
-                toggleModal('auth-modal');
-                alert("Добро пожаловать, Кодер!");
-            } else {
-                alert("Неверный логин или пароль! (Попробуй admin / 1234)");
-            }
-        }
+                const newVideo = {
+                    id: Date.now(),
+                    title: title,
+                    desc: desc,
+                    src: fileURL,
+                    thumbnail: 'https://via.placeholder.com/300x180?text=New+Video', // Заглушка
+                    views: "0",
+                    author: currentUser.name,
+                    likes: 0
+                };
 
-        function logout() {
-            currentUser = null;
-            document.getElementById('auth-buttons').style.display = 'flex';
-            document.getElementById('user-buttons').style.display = 'none';
-            showPage('home-page');
-        }
+                videos.unshift(newVideo); // Добавляем в начало
+                renderVideos(videos);
 
-        // --- 7. ЗАГРУЗКА ВИДЕО (ИМИТАЦИЯ) ---
-        function uploadVideo() {
-            const title = document.getElementById('upload-title').value;
-            const desc = document.getElementById('upload-desc').value;
-            const fileInput = document.getElementById('upload-file');
+                // Добавляем в "Мои видео"
+                const myGrid = document.getElementById('my-videos-grid');
+                if(myGrid.innerText.includes("Вы пока не загрузили")) myGrid.innerHTML = '';
 
-            if (title && fileInput.files[0]) {
-                const file = fileInput.files[0];
-                const fileURL = URL.createObjectURL(file); // Создаем ссылку на локальный файл
+                // Клонируем карточку для профиля
+                // (В реальном проекте тут был бы отдельный рендер)
+                toggleModal('upload-modal');
+                alert("Видео успешно опубликовано!");
+                showPage('home-page');
+            } else {
+                alert("Заполните название и выберите файл!");
+            }
+        }
 
-                const newVideo = {
-                    id: Date.now(),
-                    title: title,
-                    desc: desc,
-                    src: fileURL,
-                    thumbnail: 'https://via.placeholder.com/300x180?text=New+Video', // Заглушка
-                    views: "0",
-                    author: currentUser.name,
-                    likes: 0
-                };
+        // --- 8. ПОИСК ---
+        function searchVideos() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const filtered = videos.filter(v => v.title.toLowerCase().includes(query));
+            renderVideos(filtered);
+        }
 
-                videos.unshift(newVideo); // Добавляем в начало
-                renderVideos(videos);
+        // --- 9. КОММЕНТАРИИ ---
+        function addComment() {
+            const text = document.getElementById('comment-text').value;
+            if(!text) return;
+            if(!currentUser) {
+                alert("Сначала войдите в аккаунт!");
+                return;
+            }
 
-                // Добавляем в "Мои видео"
-                const myGrid = document.getElementById('my-videos-grid');
-                if(myGrid.innerText.includes("Вы пока не загрузили")) myGrid.innerHTML = '';
+            comments.push({ user: currentUser.name, text: text });
+            document.getElementById('comment-text').value = '';
+            renderComments();
+        }
 
-                // Клонируем карточку для профиля
-                // (В реальном проекте тут был бы отдельный рендер)
-                toggleModal('upload-modal');
-                alert("Видео успешно опубликовано!");
-                showPage('home-page');
-            } else {
-                alert("Заполните название и выберите файл!");
-            }
-        }
-
-        // --- 8. ПОИСК ---
-        function searchVideos() {
-            const query = document.getElementById('search-input').value.toLowerCase();
-            const filtered = videos.filter(v => v.title.toLowerCase().includes(query));
-            renderVideos(filtered);
-        }
-
-        // --- 9. КОММЕНТАРИИ ---
-        function addComment() {
-            const text = document.getElementById('comment-text').value;
-            if(!text) return;
-            if(!currentUser) {
-                alert("Сначала войдите в аккаунт!");
-                return;
-            }
-
-            comments.push({ user: currentUser.name, text: text });
-            document.getElementById('comment-text').value = '';
-            renderComments();
-        }
-
-        function renderComments() {
-            const list = document.getElementById('comments-list');
-            list.innerHTML = '';
-            comments.forEach(c => {
-                const item = document.createElement('div');
-                item.className = 'comment';
-                item.innerHTML = `
-                    <div class="channel-avatar" style="min-width:30px;">${c.user[0]}</div>
-                    <div>
-                        <div style="font-weight:bold; font-size:13px;">${c.user}</div>
-                        <div style="font-size:14px;">${c.text}</div>
-                    </div>
-                `;
-                list.appendChild(item);
-            });
-        }
-    </script>
+        function renderComments() {
+            const list = document.getElementById('comments-list');
+            list.innerHTML = '';
+            comments.forEach(c => {
+                const item = document.createElement('div');
+                item.className = 'comment';
+                item.innerHTML = `
+                    <div class="channel-avatar" style="min-width:30px;">${c.user[0]}</div>
+                    <div>
+                        <div style="font-weight:bold; font-size:13px;">${c.user}</div>
+                        <div style="font-size:14px;">${c.text}</div>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+    </script>
 </body>
 </html>
