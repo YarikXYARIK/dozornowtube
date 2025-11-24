@@ -5,80 +5,183 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DozorNowTube</title>
     <style>
-        /* --- ТВОИ СТИЛИ (ОСТАВЛЯЕМ БЕЗ ИЗМЕНЕНИЙ) --- */
-        :root {
-            --primary-pink: #ff2a6d;
-            --dark-pink: #d10047;
-            --light-pink: #ff5c8d;
-            --dark-bg: #0c0c1d;
-            --darker-bg: #050510;
-            --text-color: #ffffff;
-            --secondary-text: #cccccc;
+        /* --- ПЕРЕМЕННЫЕ ТЕМ (DEFAULT: DARK) --- */
+        :root, .theme-dark {
+            /* Dark Theme: Gray-Pink */
+            --primary-color: #ff2a6d; /* Ярко-розовый акцент */
+            --secondary-color: #d10047; /* Темный розовый */
+            --bg-main: #1c1c2e; /* Главный фон (Темно-серый/синий) */
+            --bg-secondary: #282840; /* Фон карточек и сайдбара */
+            --text-main: #ffffff;
+            --text-secondary: #cccccc;
+            --border-color: #3e3e60;
         }
+        
+        .theme-light {
+            /* Light Theme: Soft Blue-Black */
+            --primary-color: #007bff; /* Мягкий синий акцент */
+            --secondary-color: #0056b3; 
+            --bg-main: #f0f8ff; /* Светлый фон */
+            --bg-secondary: #ffffff; /* Фон карточек и сайдбара */
+            --text-main: #000000;
+            --text-secondary: #555555;
+            --border-color: #dddddd;
+        }
+
+        /* --- ОСНОВНЫЕ СТИЛИ --- */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', Arial, sans-serif; }
-        body { background-color: var(--dark-bg); color: var(--text-color); }
+        
+        body { 
+            background-color: var(--bg-main); 
+            color: var(--text-main); 
+            transition: background-color 0.3s, color 0.3s;
+        }
 
         /* Header */
-        header { background-color: var(--darker-bg); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary-pink); position: sticky; top: 0; z-index: 100; }
-        .logo { display: flex; align-items: center; font-size: 24px; font-weight: bold; color: var(--primary-pink); cursor: pointer; }
+        header { 
+            background-color: var(--bg-secondary); 
+            padding: 10px 20px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-bottom: 2px solid var(--primary-color); 
+            position: sticky; 
+            top: 0; 
+            z-index: 100; 
+        }
+        .logo { display: flex; align-items: center; font-size: 24px; font-weight: bold; color: var(--primary-color); cursor: pointer; }
         .logo i { margin-right: 10px; }
         .search-bar { display: flex; flex: 0 1 600px; }
-        .search-bar input { width: 100%; padding: 8px 15px; background-color: var(--dark-bg); border: 1px solid var(--primary-pink); color: var(--text-color); border-radius: 20px 0 0 20px; outline: none; }
-        .search-bar button { padding: 8px 15px; background-color: var(--primary-pink); border: none; border-radius: 0 20px 20px 0; color: white; cursor: pointer; }
+        .search-bar input { 
+            width: 100%; 
+            padding: 8px 15px; 
+            background-color: var(--bg-main); 
+            border: 1px solid var(--primary-color); 
+            color: var(--text-main); 
+            border-radius: 20px 0 0 20px; 
+            outline: none; 
+        }
+        .search-bar button { 
+            padding: 8px 15px; 
+            background-color: var(--primary-color); 
+            border: none; 
+            border-radius: 0 20px 20px 0; 
+            color: white; 
+            cursor: pointer; 
+        }
         .user-actions { display: flex; align-items: center; }
-        .user-actions button { background: none; border: none; color: var(--text-color); margin-left: 15px; cursor: pointer; font-size: 16px; display: flex; align-items: center; gap: 5px; }
+        .user-actions button { 
+            background: none; 
+            border: none; 
+            color: var(--text-main); 
+            margin-left: 15px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            display: flex; 
+            align-items: center; 
+            gap: 5px; 
+        }
+        .theme-toggle-btn {
+            color: var(--primary-color) !important;
+            font-size: 20px !important;
+        }
 
         /* Layout */
         .container { display: flex; max-width: 1400px; margin: 0 auto; min-height: 100vh; }
-        .sidebar { width: 240px; background-color: var(--darker-bg); padding: 20px 0; height: calc(100vh - 60px); position: sticky; top: 60px; overflow-y: auto; }
+        .sidebar { 
+            width: 240px; 
+            background-color: var(--bg-secondary); 
+            padding: 20px 0; 
+            height: calc(100vh - 60px); 
+            position: sticky; 
+            top: 60px; 
+            overflow-y: auto; 
+            border-right: 1px solid var(--border-color);
+        }
         .sidebar-item { padding: 10px 20px; display: flex; align-items: center; cursor: pointer; transition: 0.3s; }
-        .sidebar-item:hover { background-color: rgba(255, 42, 109, 0.1); }
-        .sidebar-item.active { background-color: rgba(255, 42, 109, 0.2); border-right: 3px solid var(--primary-pink); }
-        .sidebar-item i { margin-right: 15px; color: var(--primary-pink); }
+        .sidebar-item:hover { background-color: rgba(var(--primary-color-rgb, 255, 42, 109), 0.1); }
+        .sidebar-item.active { background-color: rgba(var(--primary-color-rgb, 255, 42, 109), 0.2); border-right: 3px solid var(--primary-color); }
+        .sidebar-item i { margin-right: 15px; color: var(--primary-color); }
 
         .main-content { flex: 1; padding: 20px; }
-        .section-title { margin-bottom: 20px; font-size: 24px; color: var(--primary-pink); }
+        .section-title { margin-bottom: 20px; font-size: 24px; color: var(--primary-color); }
 
         /* Video Grid */
         .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-        .video-card { background-color: var(--darker-bg); border-radius: 8px; overflow: hidden; transition: transform 0.3s; cursor: pointer; }
-        .video-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(255, 42, 109, 0.3); }
+        .video-card { 
+            background-color: var(--bg-secondary); 
+            border-radius: 8px; 
+            overflow: hidden; 
+            transition: transform 0.3s; 
+            cursor: pointer; 
+            border: 1px solid var(--border-color);
+        }
+        .video-card:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 5px 15px rgba(var(--primary-color-rgb, 255, 42, 109), 0.3); 
+        }
         .thumbnail { width: 100%; height: 180px; background-color: #222; position: relative; overflow: hidden; }
         .thumbnail img { width: 100%; height: 100%; object-fit: cover; }
         .duration { position: absolute; bottom: 10px; right: 10px; background-color: rgba(0, 0, 0, 0.7); padding: 2px 6px; border-radius: 4px; font-size: 12px; }
         .video-info { padding: 10px; }
         .video-title { font-weight: bold; margin-bottom: 5px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .channel-info { display: flex; align-items: center; margin-top: 8px; font-size: 14px; color: var(--secondary-text); }
-        .channel-avatar { width: 30px; height: 30px; border-radius: 50%; background-color: var(--light-pink); margin-right: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; font-size: 12px;}
-        .video-stats { color: var(--secondary-text); font-size: 13px; margin-top: 5px; }
+        .channel-info { display: flex; align-items: center; margin-top: 8px; font-size: 14px; color: var(--text-secondary); }
+        .channel-avatar { 
+            width: 30px; 
+            height: 30px; 
+            border-radius: 50%; 
+            background-color: var(--primary-color); 
+            margin-right: 8px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-weight: bold; 
+            color: white; 
+            font-size: 12px;
+        }
+        .video-stats { color: var(--text-secondary); font-size: 13px; margin-top: 5px; }
+
+        /* Featured Player Styles (VK Embed Fix) */
+        .featured-player {
+            margin-bottom: 40px; 
+            border: 2px solid var(--primary-color); 
+            border-radius: 10px; 
+            overflow: hidden;
+            background-color: #000;
+        }
+        .featured-player iframe {
+            display: block; /* Убираем лишние отступы */
+        }
+
 
         /* Pages logic (Hidden by default) */
         .video-player-container, .channel-page, .auth-modal, .upload-modal, .admin-panel { display: none; }
 
         /* Player Styles */
         .real-video-player { width: 100%; background: #000; border-radius: 8px; max-height: 600px; }
-        .video-controls { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #333; }
-        .action-btn { background: none; border: none; color: white; cursor: pointer; display: flex; align-items: center; gap: 5px; margin-right: 15px; font-size: 16px;}
-        .action-btn:hover { color: var(--primary-pink); }
-        .subscribe-btn { padding: 10px 20px; background-color: var(--primary-pink); border: none; border-radius: 20px; color: white; cursor: pointer; font-weight: bold; margin-left: auto; }
-        .subscribe-btn.subscribed { background-color: #444; }
+        .video-controls { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid var(--border-color); }
+        .action-btn { background: none; border: none; color: var(--text-main); cursor: pointer; display: flex; align-items: center; gap: 5px; margin-right: 15px; font-size: 16px;}
+        .action-btn:hover { color: var(--primary-color); }
+        .subscribe-btn { padding: 10px 20px; background-color: var(--primary-color); border: none; border-radius: 20px; color: white; cursor: pointer; font-weight: bold; margin-left: auto; }
+        .subscribe-btn.subscribed { background-color: var(--text-secondary); }
 
         /* Comments */
         .comments-section { margin-top: 20px; }
         .comment-form { display: flex; gap: 10px; margin-bottom: 20px; }
-        .comment-input { flex: 1; padding: 10px; background: var(--darker-bg); border: 1px solid #333; color: white; border-radius: 4px; }
-        .comment-submit { padding: 0 20px; background: var(--primary-pink); border: none; color: white; border-radius: 4px; cursor: pointer; }
-        .comment { border-bottom: 1px solid #333; padding: 10px 0; display: flex; gap: 10px; }
+        .comment-input { flex: 1; padding: 10px; background: var(--bg-secondary); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 4px; }
+        .comment-submit { padding: 0 20px; background: var(--primary-color); border: none; color: white; border-radius: 4px; cursor: pointer; }
+        .comment { border-bottom: 1px solid var(--border-color); padding: 10px 0; display: flex; gap: 10px; }
+        .comment:last-child { border-bottom: none; }
 
         /* Admin & Modals */
         .auth-modal, .upload-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; display: flex; }
         .auth-modal.hidden, .upload-modal.hidden { display: none; } /* Класс для скрытия */
-        .auth-form, .upload-form { background: var(--darker-bg); padding: 30px; border-radius: 10px; width: 400px; border: 1px solid var(--primary-pink); }
+        .auth-form, .upload-form { background: var(--bg-secondary); padding: 30px; border-radius: 10px; width: 400px; border: 1px solid var(--primary-color); color: var(--text-main); }
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 5px; }
-        .form-group input, .form-group textarea { width: 100%; padding: 10px; background: var(--dark-bg); border: 1px solid #444; color: white; border-radius: 4px; }
-        .auth-btn, .upload-btn { width: 100%; padding: 10px; background: var(--primary-pink); border: none; color: white; cursor: pointer; margin-top: 10px; }
-        .close-modal { float: right; cursor: pointer; font-size: 20px; }
+        .form-group input, .form-group textarea { width: 100%; padding: 10px; background: var(--bg-main); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 4px; }
+        .auth-btn, .upload-btn { width: 100%; padding: 10px; background: var(--primary-color); border: none; color: white; cursor: pointer; margin-top: 10px; }
+        .close-modal { float: right; cursor: pointer; font-size: 20px; color: var(--text-secondary); }
 
         /* Responsive */
         @media (max-width: 768px) {
@@ -137,9 +240,11 @@
             <button onclick="searchVideos()"><i class="fas fa-search"></i></button>
         </div>
         <div class="user-actions" id="auth-buttons">
+            <button class="theme-toggle-btn" onclick="toggleTheme()"><i class="fas fa-sun" id="theme-icon"></i></button>
             <button onclick="toggleModal('auth-modal')"><i class="fas fa-user-circle"></i> Войти</button>
         </div>
         <div class="user-actions" id="user-buttons" style="display:none;">
+            <button class="theme-toggle-btn" onclick="toggleTheme()"><i class="fas fa-sun" id="theme-icon-user"></i></button>
             <button onclick="toggleModal('upload-modal')"><i class="fas fa-upload"></i></button>
             <button onclick="showPage('channel-page')"><i class="fas fa-user"></i></button>
             <button onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
@@ -160,19 +265,19 @@
         </div>
 
         <div class="main-content" id="home-page">
-            <h2 class="section-title">В ЭФИРЕ СЕЙЧАС</h2> 
+            <h2 class="section-title" style="margin-bottom: 10px;">Лучшая рекомендация дня</h2> 
             
-            <div style="margin-bottom: 30px;">
+            <div class="featured-player">
                 <iframe src="https://vkvideo.ru/video_ext.php?oid=-211169870&id=456242051&autoplay=1" 
                         width="100%" 
-                        height="450" 
-                        style="background-color: #000; border-radius: 8px;" 
+                        height="500" 
+                        style="background-color: #000;" 
                         allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;" 
                         frameborder="0" 
                         allowfullscreen>
                 </iframe>
             </div>
-                        <h2 class="section-title">Рекомендуемые</h2>
+                        <h2 class="section-title">Ещё рекомендации</h2>
             <div class="video-grid" id="video-grid">
                 </div>
         </div>
@@ -188,7 +293,7 @@
                     </div>
                     <button class="subscribe-btn" id="sub-btn" onclick="toggleSubscribe()">Подписаться</button>
                 </div>
-                <div style="background: var(--darker-bg); padding: 15px; border-radius: 8px; margin-top:10px;">
+                <div style="background: var(--bg-secondary); padding: 15px; border-radius: 8px; margin-top:10px; border: 1px solid var(--border-color);">
                     <p id="player-desc">Описание видео...</p>
                 </div>
 
@@ -209,12 +314,12 @@
                 <div class="channel-avatar" style="width:100px; height:100px; font-size:40px;">U</div>
                 <div>
                     <h1 id="channel-name">User Name</h1>
-                    <p style="color:gray;">0 подписчиков</p>
+                    <p style="color:var(--text-secondary);">0 подписчиков</p>
                 </div>
             </div>
             <h2>Мои видео</h2>
             <div class="video-grid" id="my-videos-grid">
-                <p style="color:gray;">Вы пока не загрузили видео.</p>
+                <p style="color:var(--text-secondary);">Вы пока не загрузили видео.</p>
             </div>
         </div>
     </div>
@@ -260,9 +365,35 @@
         // --- 2. ИНИЦИАЛИЗАЦИЯ ---
         window.onload = function() {
             renderVideos(videos);
+            // Устанавливаем иконку темы при загрузке
+            const isLight = document.body.classList.contains('theme-light');
+            document.getElementById('theme-icon').className = isLight ? 'fas fa-moon' : 'fas fa-sun';
+            if (document.getElementById('theme-icon-user')) {
+                 document.getElementById('theme-icon-user').className = isLight ? 'fas fa-moon' : 'fas fa-sun';
+            }
         };
+        
+        // --- 3. ЛОГИКА СМЕНЫ ТЕМЫ ---
+        function toggleTheme() {
+            document.body.classList.toggle('theme-light');
+            document.body.classList.toggle('theme-dark');
+            
+            const isLight = document.body.classList.contains('theme-light');
+            const iconElement = document.getElementById('theme-icon');
+            const iconElementUser = document.getElementById('theme-icon-user');
 
-        // --- 3. ФУНКЦИИ ОТРИСОВКИ ---
+            if (iconElement) {
+                iconElement.className = isLight ? 'fas fa-moon' : 'fas fa-sun';
+            }
+            if (iconElementUser) {
+                iconElementUser.className = isLight ? 'fas fa-moon' : 'fas fa-sun';
+            }
+            // Сохраняем выбор темы в браузере (опционально)
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        }
+
+
+        // --- 4. ФУНКЦИИ ОТРИСОВКИ ---
         function renderVideos(videoList) {
             const grid = document.getElementById('video-grid');
             grid.innerHTML = '';
@@ -290,20 +421,25 @@
             });
         }
 
-        // --- 4. НАВИГАЦИЯ ---
+        // --- 5. НАВИГАЦИЯ ---
         function showPage(pageId) {
             // Скрываем все страницы
             document.getElementById('home-page').style.display = 'none';
             document.getElementById('player-page').style.display = 'none';
             document.getElementById('channel-page').style.display = 'none';
+             // Убираем активный класс у всех сайдбар-элементов
+            document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
+
 
             // Показываем нужную
-            document.getElementById(pageId).style.display = (pageId === 'player-page') ? 'block' : (pageId === 'video-grid' ? 'grid' : 'block');
+            document.getElementById(pageId).style.display = (pageId === 'player-page') ? 'block' : 'block';
 
             if(pageId === 'home-page') {
                 document.getElementById('home-page').style.display = 'block';
                 // Останавливаем видео если ушли с плеера
                 document.getElementById('main-video-player').pause();
+                 // Делаем активным пункт "Главная"
+                 document.querySelector('.sidebar-item').classList.add('active');
             }
         }
 
@@ -316,7 +452,7 @@
             }
         }
 
-        // --- 5. ЛОГИКА ПЛЕЕРА ---
+        // --- 6. ЛОГИКА ПЛЕЕРА ---
         function openPlayer(video) {
             showPage('player-page');
             const player = document.getElementById('main-video-player');
@@ -334,7 +470,7 @@
             let count = document.getElementById('like-count');
             count.innerText = parseInt(count.innerText) + 1;
             // Анимация кнопки (просто изменение цвета)
-            event.currentTarget.style.color = 'var(--primary-pink)';
+            event.currentTarget.style.color = 'var(--primary-color)';
         }
 
         function toggleSubscribe() {
@@ -348,7 +484,7 @@
             }
         }
 
-        // --- 6. АВТОРИЗАЦИЯ ---
+        // --- 7. АВТОРИЗАЦИЯ ---
         function login() {
             const loginInput = document.getElementById('login-input').value;
             const passInput = document.getElementById('pass-input').value;
@@ -372,7 +508,7 @@
             showPage('home-page');
         }
 
-        // --- 7. ЗАГРУЗКА ВИДЕО (ИМИТАЦИЯ) ---
+        // --- 8. ЗАГРУЗКА ВИДЕО (ИМИТАЦИЯ) ---
         function uploadVideo() {
             const title = document.getElementById('upload-title').value;
             const desc = document.getElementById('upload-desc').value;
@@ -410,14 +546,14 @@
             }
         }
 
-        // --- 8. ПОИСК ---
+        // --- 9. ПОИСК ---
         function searchVideos() {
             const query = document.getElementById('search-input').value.toLowerCase();
             const filtered = videos.filter(v => v.title.toLowerCase().includes(query));
             renderVideos(filtered);
         }
 
-        // --- 9. КОММЕНТАРИИ ---
+        // --- 10. КОММЕНТАРИИ ---
         function addComment() {
             const text = document.getElementById('comment-text').value;
             if(!text) return;
