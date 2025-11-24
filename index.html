@@ -162,6 +162,14 @@
             display: block; 
         }
 
+        /* Styles for EMBED PLAYER in video-player-container */
+        .embedded-video-player {
+            width: 100%; 
+            height: 500px; /* Фиксированная высота для iframe, чтобы он не схлопывался */
+            background: #000; 
+            border-radius: 8px;
+        }
+
 
         /* Pages logic (Hidden by default) */
         .video-player-container, .channel-page, .auth-modal, .upload-modal, .admin-panel { display: none; }
@@ -290,7 +298,10 @@
         </div>
 
         <div class="main-content video-player-container" id="player-page" style="display:none;">
-            <video id="main-video-player" class="real-video-player" controls autoplay></video>
+            <div id="player-area">
+                <video id="main-video-player" class="real-video-player" controls autoplay></video>
+                </div>
+            
             <div class="video-info">
                 <h2 id="player-title" style="margin-top:10px;">Название видео</h2>
                 <div class="video-controls">
@@ -363,6 +374,28 @@
                 views: "2.5M",
                 author: "Tears Studio",
                 likes: 3000
+            },
+            {
+                id: 4,
+                title: "Subaru Outback - Off-road drive",
+                desc: "Тестовое видео для демонстрации качества 4K.",
+                src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndOffRoad.mp4",
+                thumbnail: "https://img.youtube.com/vi/D9n0Y1vJ1hU/maxresdefault.jpg",
+                views: "500K",
+                author: "Test Drive",
+                likes: 600
+            },
+            // НОВОЕ VK EMBED ВИДЕО
+            {
+                id: 5,
+                title: "ОБЗОР: Секретный ролик от DozorNow",
+                desc: "Специально вставленное видео для тестирования iframe-плеера.",
+                src: "https://vkvideo.ru/video_ext.php?oid=-230360961&id=456239056&autoplay=1",
+                thumbnail: "https://via.placeholder.com/300x180?text=VK+Dozor",
+                views: "30K",
+                author: "DozorNow Channel",
+                likes: 250,
+                isEmbed: true // Флаг для определения, что это iframe, а не <video>
             }
         ];
 
@@ -384,9 +417,13 @@
                 card.className = 'video-card';
                 card.onclick = () => openPlayer(video);
 
+                // Добавляем иконку "ссылка/VK", если это iframe
+                const embedIcon = video.isEmbed ? '<span style="position: absolute; top: 10px; left: 10px; background-color: var(--primary-color); padding: 3px 6px; border-radius: 4px; font-size: 12px; font-weight: bold;">VK 🔗</span>' : '';
+
                 card.innerHTML = `
                     <div class="thumbnail">
                         <img src="${video.thumbnail}" alt="${video.title}" onerror="this.src='https://via.placeholder.com/300x180?text=No+Image'">
+                        ${embedIcon}
                         <span class="duration">10:00</span>
                     </div>
                     <div class="video-info">
@@ -411,14 +448,16 @@
             // Убираем активный класс у всех сайдбар-элементов
             document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
 
+            // Останавливаем плеер при переходе на другую страницу
+            const playerArea = document.getElementById('player-area');
+            playerArea.innerHTML = '<video id="main-video-player" class="real-video-player" controls autoplay></video>';
+
 
             // Показываем нужную
             document.getElementById(pageId).style.display = (pageId === 'player-page') ? 'block' : 'block';
 
             if(pageId === 'home-page') {
                 document.getElementById('home-page').style.display = 'block';
-                // Останавливаем видео если ушли с плеера
-                document.getElementById('main-video-player').pause();
                 // Делаем активным пункт "Главная"
                 document.querySelector('.sidebar-item').classList.add('active');
             }
@@ -436,9 +475,26 @@
         // --- 5. ЛОГИКА ПЛЕЕРА ---
         function openPlayer(video) {
             showPage('player-page');
-            const player = document.getElementById('main-video-player');
-            player.src = video.src;
-            player.play();
+            const playerArea = document.getElementById('player-area');
+            
+            // Очищаем область плеера
+            playerArea.innerHTML = '';
+            
+            if (video.isEmbed) {
+                // Если это iframe (VK, YouTube и т.д.)
+                playerArea.innerHTML = `
+                    <iframe src="${video.src}" 
+                        class="embedded-video-player"
+                        allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;" 
+                        frameborder="0" 
+                        allowfullscreen>
+                    </iframe>
+                `;
+            } else {
+                // Если это обычный MP4 файл
+                playerArea.innerHTML = `<video id="main-video-player" class="real-video-player" controls autoplay src="${video.src}"></video>`;
+            }
+
 
             document.getElementById('player-title').innerText = video.title;
             document.getElementById('player-desc').innerText = video.desc;
